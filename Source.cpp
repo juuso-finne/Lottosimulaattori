@@ -8,26 +8,25 @@ struct Lottokuponki {
 	vector<vector<bool>> lottorivit;
 };
 
-int Kysy_luku(int, int, string);
-int Arvo_satunnaisluku(int, int);
-void Tulosta_paavalikko();
-vector<bool> Arvo_lottorivi();
-void Simuloi_lottokierros(Lottokuponki&, int&, int&, int, int);
-void Syota_lottorivi_kasin(Lottokuponki&, int);
-void Tulosta_lottorivi(vector<bool>);
-void Odota();
-void Tyhjenna_ruutu();
-int Laske_voittosumma(int);
-int Tarkasta_lottokuponki(int, vector<bool>, Lottokuponki&, int, int);
 bool Paavalikko(int&, int&, int, int, Lottokuponki&);
+void Tulosta_paavalikko();
 void Nayta_ohje();
+void Syota_lottorivi_kasin(Lottokuponki&, int);
 void Anna_koneen_arpoa_rivit(Lottokuponki&, int);
 void Tulosta_kuponki(Lottokuponki&);
 void Pelaa_lottoa(Lottokuponki&, int&, int&, int);
 void Nollaa_voitot_ja_tappiot(int&, int&);
 void Tyhjenna_kuponki(Lottokuponki&);
 
-
+int Kysy_luku(int, int, string);
+int Arvo_satunnaisluku(int, int);
+vector<bool> Arvo_lottorivi();
+void Simuloi_lottokierros(Lottokuponki&, int&, int&, int, int);
+void Tulosta_lottorivi(vector<bool>);
+void Odota();
+void Tyhjenna_ruutu();
+int Laske_voittosumma(int);
+int Tarkasta_lottokuponki(int, vector<bool>, Lottokuponki&, int, int);
 
 
 int main() {
@@ -112,7 +111,8 @@ vector<bool> Arvo_lottorivi(){
 }
 
 void Simuloi_lottokierros(Lottokuponki& kuponki, int& voitot, int& tappiot, int tulostuskynnys, int kierrosnumero){
-
+	// Arpoo kierroksen oikeat voittonumerot ja lis‰numeron ja l‰hett‰‰ ne funktiolla, joka tarkistaa kupongin. 
+	//Kirjaa kierroksen voitot ja tappiot (v‰litet‰‰n viiteparametrein‰, koska niit‰ ei palauteta).
 
 	int kierroksen_hinta = kuponki.lottorivit.size();
 	tappiot += kierroksen_hinta;
@@ -122,15 +122,10 @@ void Simuloi_lottokierros(Lottokuponki& kuponki, int& voitot, int& tappiot, int 
 
 	do {
 		lisanumero = Arvo_satunnaisluku(1, 40);
-	} while (voittonumerot[lisanumero]);
+	} while (voittonumerot[lisanumero]); // Varmistetaan, ett‰ arvotaan lis‰numero, joka ei ole voittonumeroiden joukossa.
 
 	int kierroksen_voitot = Tarkasta_lottokuponki(lisanumero, voittonumerot, kuponki, kierrosnumero, tulostuskynnys);
 	voitot += kierroksen_voitot;
-
-	int viimeisin_voittokierros = 1;
-
-	if (kierroksen_voitot > 0)
-		viimeisin_voittokierros = kierrosnumero;
 }
 
 void Syota_lottorivi_kasin(Lottokuponki& kuponki, int vapaat_rivit) {
@@ -288,6 +283,8 @@ int Tarkasta_lottokuponki(int lisanumero, vector<bool> voittonumerot_bool, Lotto
 }
 
 bool Paavalikko(int& voitot, int& tappiot, int MAX_RIVIT, int MAX_KIERROKSET, Lottokuponki& kuponki) {
+	//Antaa k‰skyn tulostaa p‰‰valikko ja kutsuu ohjelman eri funktioita k‰ytt‰j‰n valinnan perusteella.
+
 	cout << "LOTTOSIMULAATTORI\n\n";
 
 	int saldo = voitot - tappiot;
@@ -334,6 +331,7 @@ bool Paavalikko(int& voitot, int& tappiot, int MAX_RIVIT, int MAX_KIERROKSET, Lo
 
 
 void Nayta_ohje() {
+	// Tulostaa pelin s‰‰nnˆt ja ohjeet n‰ytˆlle
 	Tyhjenna_ruutu();
 	cout << "Lotossa yrit‰t arvata oikein 7 satunnaisesti arvottua numeroa 40:st‰. Joka kierroksella arvotaan myˆs lis‰numero, ";
 	cout << "jonka arvaaminen antaa suuremman voiton, mik‰li arvaat 3 tai 6 voittonumeroista oikein. Lis‰‰ kupongillesi rivej‰ ";
@@ -351,6 +349,7 @@ void Nayta_ohje() {
 }
 
 void Anna_koneen_arpoa_rivit(Lottokuponki& kuponki, int max_rivit) {
+	// T‰ytt‰‰ halutun m‰‰r‰n lottorivej‰ annetulle kupongille. Parametri max_rivit kertoo, montako rivi‰ kupongille viel‰ mahtuu
 	Tyhjenna_ruutu();
 	cout << "Kupongille mahtuu viel‰ " << max_rivit << " rivi‰.\n";
 	int rivien_maara = Kysy_luku(0, max_rivit, "Montako rivi‰ haluat arpoa (0 = peruuta): ");
@@ -359,6 +358,7 @@ void Anna_koneen_arpoa_rivit(Lottokuponki& kuponki, int max_rivit) {
 }
 
 void Tulosta_kuponki(Lottokuponki& kuponki) {
+	//Tulostaa kupongin lottorivit n‰ytˆlle yksi kerrallaan
 	Tyhjenna_ruutu();
 
 	cout << "Lottokupongin rivit:\n";
@@ -369,6 +369,9 @@ void Tulosta_kuponki(Lottokuponki& kuponki) {
 }
 
 void Pelaa_lottoa(Lottokuponki& kuponki, int& voitot, int& tappiot, int MAX_KIERROKSET) {
+	//Kysyy k‰ytt‰j‰lt‰ kierrosten m‰‰r‰n ja tulostusasetukset
+	//Varoittaa k‰ytt‰j‰‰ tulostamasta jokaista voittorivi‰, jos niit‰ on odotettavissa paljon
+
 	Tyhjenna_ruutu();
 
 	if (kuponki.lottorivit.empty()) {
